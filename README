@@ -1,0 +1,27 @@
+komacv
+======
+(License: LaTeX Project)
+
+The komacv class makes typesetting a beautiful CV easy!
+Different style are offered by the associated style packages and virtually all settings can be changed by the user.
+
+The komacv class is fully documented. Example files give an impression of what the your CV might look like with the different styles.
+
+The komacv class is built upon the scrartcl class. Pagelayout, headings etc. can can be easily configured in the KOMA-way. Moreover, the komacv class is fully compatible with biblatex.
+
+Installation:
+
+1. Download the gzip-archive and unpack it.
+
+2. Move the documentation "komacv.pdf" and the "examples" folder to the doc-directory in your local tex-directory (create a subdirectory "komacv").
+
+3. Run the command "latex" on the file "komacv.ins".
+
+4. Move the file "komacv.cls" and the .sty-files to your local tex-directory (create a subdirectory "komacv").
+
+5. Run texhash on your local tex-directory.
+
+
+I hope you enjoy this class.
+Suggestions, wishes, bug reports:
+salome.soedergran@gmx.ch

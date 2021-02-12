@@ -1,0 +1,216 @@
+%% start of file `komacv_example.tex'; shows exemplarily the use of the komacv class
+%% (c) Copyright 2014-2021 Salome Södergran (salome.soedergran@gmx.ch)
+%% 
+%% Test the flexibility of the class komacv by removing (or adding) the comment signs and changing the values. These are preset not as recommendations of good style but to make the effect as clear as possible!
+%%
+\documentclass[%
+% xcolor=svgnames,%
+% color=mycolor,%
+% DIV=19,
+% fontsize=20,
+% style=classic,% (default) OR
+% style=casual,% OR
+% style=oldstyle,%
+% fontawesome=false,
+]{komacv}
+
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+\ifoot{CV~\firstname~\familyname}
+\ofoot{\pagemark/\totalpagemark}
+%\ihead{Hello world!}
+%\ohead{My life so far}
+
+% ===========================
+%    LENGTHS
+% ===========================
+% \setlength\titlenamemaxwidth{.4\textwidth}
+% \setlength\hintscolwidth{2cm}
+% \setlength\sepcolwidth{1em}
+% \setlength\quotewidth{.3\textwidth}
+% \setlength\titlesepwidth{50pt}
+ \setlength\infocolwidth{4cm} % for oldstyle only!
+% \setlength\sepinfocolwidth{6em} % for oldstyle only!
+% \setlength\footerwidth{.5\textwidth} % for casual style only
+% \setlength\aftertitlevspace{5\baselineskip}
+% \setlength\afterquotevspace{8\baselineskip}
+% \setlength\afterelementsvspace{40pt}
+% \setlength\beforesecvspace{3\baselineskip}
+% \setlength\aftersecvspace{4\baselineskip}
+% \setlength\beforesubsecvspace{3\baselineskip}
+% \setlength\aftersubsecvspace{4\baselineskip}
+% \setlength\listitemsymbolwidth{1cm}
+
+
+% ===========================
+%    COLORS
+% ===========================
+% \xdefinecolor{mycolor}{cmyk}{0.92,0,0.87,0.09}
+% \colorlet{firstnamecolor}{blue}
+% \colorlet{familynamecolor}{red}
+% \colorlet{headlinecolor}{pink}
+% \colorlet{acadtitlecolor}{green}
+% \colorlet{addresscolor}{gray}
+% \colorlet{quotecolor}{pink}
+% \colorlet{framecolor}{yellow}
+% \colorlet{framebackcolor}{black}
+% \colorlet{secbarcolor}{firstnamecolor}
+% \colorlet{seccolor}{familynamecolor}
+% \colorlet{subseccolor}{pink!70!black}
+% \colorlet{hintcolor}{orange}
+
+% ===========================
+%    FONTS
+% ===========================
+%% Fonts, for use with LuaLaTeX oder XeLaTeX
+% \defaultfontfeatures{Renderer=Basic,Ligatures=TeX}
+% \setmainfont[Numbers=OldStyle]{Palatino Linotype}
+% \setsansfont{AvantGarde Bk BT}
+% \setmonofont{Courier New}
+
+% \setkomafont{firstnamefont}{\fontsize{24}{26}\itshape}
+\addtokomafont{firstnamefont}{\fontsize{35}{50}}
+% \addtokomafont{familynamefont}{\scshape}
+% \setkomafont{addressfont}{\scriptsize}
+% \setkomafont{acadtitlefont}{\usekomafont{familynamefont}}
+% \setkomafont{quotefont}{\ttfamily}
+% \addtokomafont{section}{\Huge\rmfamily\slshape}
+% \addtokomafont{subsection}{\bfseries}
+% \renewcommand{\headlinestyle}{\firstnamestyle}
+
+
+% ===========================
+%    HYPERSETUP
+% ===========================
+\renewcommand*\urlbordercolor{red}
+\hypersetup{pdfcreator=Someone else}
+
+% ===========================
+%    BIBLIOGRAPHY
+% ===========================
+\usepackage[backend=biber,
+style=ieee,%authortitle,% 
+sorting=ydnt,%
+]{biblatex}
+\bibliography{komacv.bib}
+\defbibheading{bibliography}[Publications]{\section{#1}}
+
+% ===========================
+%    PERSONAL DATA
+% ===========================
+\renewcommand*{\title}{CV}% PDF metadata
+\renewcommand*{\firstname}{Jane}
+\renewcommand*{\familyname}{Eyre}
+\renewcommand*{\acadtitle}{B.\,Ed.}
+\renewcommand*{\addressstreet}{Ferndean House}
+\renewcommand*{\addresscity}{Ferndean Village}
+\renewcommand*{\address}[2]{\addressstreet{#1}\addresscity{#2}}
+\renewcommand*{\mobile}{009-87654321}
+\renewcommand*{\phonenr}{001-23456789}
+\renewcommand*{\faxnr}{001-23456788}
+\renewcommand*{\email}{jeyre@ferndean.me.uk}
+\renewcommand*{\homepage}{https://www.jeyre.me.uk}
+\renewcommand*{\twitter}{twitter.com/janeeyre}
+% \renewcommand*{\github}{github.com/janeeyre}
+\renewcommand*{\facebook}{facebook.com/jane.eyre}
+% \renewcommand*{\linkedin}{https://uk.linkedin.com/pub/jane-eyre}
+\renewcommand*{\extrainfo}{Some extra info}
+% \renewcommand*{\cvquote}{\enquote{Convinced I grew that neither earth should perish, \\nor one of the souls it treasured.}} %p.373
+% \renewcommand\phonesymbol{Tel.~}
+% \headline[r]{title}[Lebenslauf] % [c|l|r]{none|name|title}[content]; default: [c]{none}[<\firstname \familyname> | Curriculum Vitae] 
+% \headline[l]{name}[Jane Elizabeth Eyre Rochester]
+
+% ===========================
+%    PICTURE
+% ===========================
+% \setlength\fboxrule{7pt}
+% \setlength\mframepicshift{1cm}
+\photo[frame]{3cm}{jeyre}
+%\photo[mframe]{5cm}{jeyre}
+
+
+\begin{document}
+\raggedbottom
+
+\maketitle
+
+\section{Personal Information}
+\cvitem{Date of birth}{February 15, 1828}
+\cvitem{Nationality}{British}
+\cvitem{Civil Status}{Married, two children}
+
+\section{Education}
+\cventry{1835--1838}{Homeschooling}{}{Gateshead}{grades 1--3}{Teacher: Mr.~NN, under supervision of my aunt Ms. Reed.}
+\cventry{1838--1844}{Lowood School}{}{Lowood}{grades 3--8}{A charitable institution under the guidance of Mr.~Brocklehurst.}
+
+\section{Work}
+
+\subsection{Teaching}
+\cventry{1844--1846}{Teacher}{Lowood School}{Lowood}{}{Teaching all grades.}
+\cventry{1846--1847}{Governess}{}{Thornfield Hall, Thornfield near Millcote}{}{Governess of Mr.~Rochester's ward Adèle, 10~years old.}
+\cventry{1847}{Village teacher}{girl's school}{Moore village}{}{Teaching all village girls, mostly farmer's daughters, all grades.}
+\cventry{1849--1867}{Home schooling}{}{Ferndean}{}{Educating and teaching my children, a son and a daughter.}
+
+ 
+\subsection{Nursing}
+\cventry{1847\,ff.}{Nursing my physically impaired husband}{}{}{}{Very poor eyesight and one hand amputated due to a fire.}
+
+\subsection{Management}
+\cventry{1847\,ff.}{Management of the family estate}{}{}{}{Including the household at Ferndean and extensive property in England and on the continent.}
+
+
+\section{Languages}
+\cvitemwithcomment{English}{fluent}{mother tongue}
+\cvitemwithcomment{French}{fluent}{oral and written}
+\cvitemwithcomment{Hindustani}{bits of}{}
+ 
+\section{Computer Knowledges}
+\raggedright
+In my time I didn't have the opportunity to acquire computer knowledges but I am willing to learn the following programs and languages:
+
+\cvdoubleitem{accounting}{GnuCash}{picture editing}{gimp}
+ 
+\cvdoubleitem{office}{\LaTeX,\\LibreOffice}{languages}{lua, html}
+ 
+\nocite{*}
+\printbibliography
+
+\newpage
+
+\section{All Elements}
+
+\subsection{cvitem}
+\cvitem{header}{cvitem text
+  \begin{compactenum}
+  \item compactenum item one
+  \item compactenum item two
+  \end{compactenum}
+}
+
+\subsection{cvdoubleitem}
+\cvdoubleitem{1st header}{1st text}{2nd header}{2nd text}
+
+\subsection{cvlistitem}
+\cvlistitem{cvlistitem item1}
+\cvlistitem{cvlistitem item2}
+
+\subsection{cvlistdoubleitem}
+\cvlistdoubleitem{item1}{item2}
+\cvlistdoubleitem{item3}{item4}
+
+\subsection{cventry}
+\cventry{years}{degree/job title}{e.\,g. institution/employer}{e.\,g. localization}{e.\,g. grade}{comment/job description}
+
+\subsection{cvitemwithcomment}
+\cvitemwithcomment{header}{text}{comment}
+
+\subsection{links}
+\link[link description]{link}
+
+\httplink[http link description]{url}
+
+\httpslink[http link description]{url}
+
+\emaillink[e-mail link description]{e-mail address}
+
+\end{document}

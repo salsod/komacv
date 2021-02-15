@@ -57,6 +57,7 @@
 \newcommand*\cvlistitemusage{\cs{cvlistitem}\oarg{label}\marg{item}\xspace}
 \newcommand*\cvlistdoubleitemusage{\cs{cvlistdoubleitem}\oarg{label}\marg{item1}\marg{item2}\xspace}
 \newcommand*\cventryusage{\cs{cventry}\oarg{spacing}\marg{years}\marg{degree/job title}\marg{institution/employer}\\\marg{localization}\marg{grade/...}\marg{comment/job description}\xspace}
+\newcommand*\cventryflexusage{e.\,g. \cs{cventryflex}\oarg{spacing}\marg{years}\marg{degree/job title}\marg{institution/employer}\\\marg{localization}\marg{grade/...}\marg{comment/job description}\xspace}
 \newcommand*\cvitemwithcommentusage{\cs{cvitemwithcomment}\oarg{spacing}\marg{header}\marg{text}\marg{comment}\xspace}
 \newcommand*\linkusage{\cs{link}\oarg{optional text}\marg{link}}
 \newcommand*\httplinkusage{\cs{httplink}\oarg{optional text}\marg{link}}
@@ -576,8 +577,15 @@
 % With the command\\
 % \cventryusage\\
 % you get a more structured description. The first mandatory argument will usually be placed in the hint column (depending on the style in use), all others in the main column, each with its own formatting. Just leave empty those arguments you do not need (use empty braces |{}|) . Note, however, that the second mandatory argument should not be empty (otherwise the entry in the main column will start with a comma).
-% In case the predefined formatting of the arguments does not suit your needs you may of course use formatting commands inside the arguments.
+% In case the predefined formatting of the arguments does not suit your needs you may of course use formatting commands inside the arguments. Do you want to change the formatting not just for one entry but for all of them, use \cs{cventryflex} instead.
 %  
+% \subsection{\cs{cventryflex}}
+% \label{sub:cventryflex}
+% \DescribeMacro{\cventryflex}
+% With the command\\
+% \cventryflexusage\\
+% you can use the structure offered by \cs{cventry} but can do your own formatting of the argument. The first mandatory argument will be displayed in the hint column (depending on the style in use), all others in the main column, the last one inside a minipage environment -- this belongs to the structure. Everything else (formatting, content, punctuation marks) is up to you. Use \cs{renewcommand}\cs{cventryflexA}\marg{<your definition>} to define the formatting of the first mandatory, \cs{cventryflexB} for the second and so on to \cs{cventryflexE}. 
+%
 %\subsection{\cs{cvitemwithcomment}}
 % \label{sub:cvitemwithcomment}
 %
@@ -1312,7 +1320,33 @@ setkeys=\kvsetkeys%
 }
 %    \end{macrocode}
 %
-%\paragraph{cvitemwithcomment}~\\%
+%\paragraph{cventryflex}~\\%
+% \changes{vxxxx}{xxxxx}{New command}
+%usage: \cventryflexusage
+%    \begin{macrocode}
+\providecommand\cventryflexA{\bfseries}
+\providecommand\cventryflexB{}
+\providecommand\cventryflexC{}
+\providecommand\cventryflexD{}
+\providecommand\cventryflexE{\small}
+\providecommand*{\cventryflex}[7][\@afterelementsvspace]{%
+  \cvitem[#1]{#2}{%
+    {\cventryflexA #3}%
+    \ifstrempty{#4}{}{\cventryflexB #4}%
+    \ifstrempty{#5}{}{\cventryflexC #5}%
+    \ifstrempty{#6}{}{\cventryflexD #6}%
+        \ifx&#7&%
+    \else{%
+      \newline{}\begin{minipage}[t]{\linewidth}%
+        \cventryflexE #7%
+      \end{minipage}%
+    }%
+    \fi%
+  }%
+}
+
+% 
+% \paragraph{cvitemwithcomment}~\\%
 % usage: \cvitemwithcommentusage
 %    \begin{macrocode}
 \newbox{\@commentmainbox}

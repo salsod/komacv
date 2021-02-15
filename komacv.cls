@@ -546,6 +546,7 @@ setkeys=\kvsetkeys%
     }%
   }%
 }
+
 \providecommand*{\cventry}[7][\@afterelementsvspace]{%
   \cvitem[#1]{#2}{%
     {\bfseries#3}%
@@ -562,6 +563,29 @@ setkeys=\kvsetkeys%
     \fi%
   }%
 }
+
+\providecommand\cventryflexA{\bfseries}
+\providecommand\cventryflexB{}
+\providecommand\cventryflexC{}
+\providecommand\cventryflexD{}
+\providecommand\cventryflexE{\small}
+\providecommand*{\cventryflex}[7][\@afterelementsvspace]{%
+  \cvitem[#1]{#2}{%
+    {\cventryflexA #3}%
+    \ifstrempty{#4}{}{\cventryflexB #4}%
+    \ifstrempty{#5}{}{\cventryflexC #5}%
+    \ifstrempty{#6}{}{\cventryflexD #6}%
+        \ifx&#7&%
+    \else{%
+      \newline{}\begin{minipage}[t]{\linewidth}%
+        \cventryflexE #7%
+      \end{minipage}%
+    }%
+    \fi%
+  }%
+}
+
+
 \newbox{\@commentmainbox}
 \providecommand*{\cvitemwithcomment}[4][\@afterelementsvspace]{%
   \savebox{\@commentmainbox}{{\usefontofkomafont{commentmainfont} #3}}%

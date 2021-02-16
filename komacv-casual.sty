@@ -105,31 +105,48 @@
 }% end savebox picbox
 \settowidth\@titlepicwidth{\usebox{\@picbox}}
 \setlength\@titlenamewidth{\textwidth-\@titlesepwidth-\@titlepicwidth}
-\setheadlinetypetitle\par
+\ifdefstring{\@headlinetype}{title}{\setheadlinetypetitle}{}
   \usebox{\@picbox}%
   \hspace*{\@titlesepwidth}%
   \parbox[b]{\@titlenamewidth}{%
       \ifdefstring{\@headlinetype}{name}{\setheadlinetypename}{%
-    \raggedleft{\firstnamestyle\firstname}%
-    ~{\familynamestyle\familyname}
-    }
-    \\
-\raggedleft\color{@firstnamecolor}\rule{\@titlenamewidth}{.25ex}\par
-  }% end parbox
-  \vspace{\@aftertitlevspace}
-  %% optional acadtitle
-  \ifdefempty{\acadtitle}{}{%
-          \ifdefstring{\@headlinetype}{name}{}{%
-    \raggedleft\acadtitlestyle{\acadtitle}}}\\[2.5em]%
-  %% optional quote
-  \ifdefempty{\cvquote}{}{%
-    {\centering
-      \begin{minipage}{\@quotewidth}%
-        \centering\quotestyle{\cvquote}
-      \end{minipage}\\[\@afterquotevspace]%
-    }
-  }%
-}% end \@cvtitle-casual
+        \raggedleft
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+          \firstnamestyle{\firstname~}% 
+          \familynamestyle{\familyname}
+        }{}
+        \ifdefstring{\komacv@acadtitleposition}{before}{%
+          \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+          \firstnamestyle{\firstname~}% 
+          \familynamestyle{\familyname}
+        }{}
+        \ifdefstring{\komacv@acadtitleposition}{after}{%
+          \firstnamestyle{\firstname~}% 
+          \familynamestyle{\familyname}%
+          \ifdefempty{\acadtitle}{}{\acadtitlestyle{,~\acadtitle}}
+        }{}
+      }
+      \\
+      \raggedleft\color{@firstnamecolor}\rule{\@titlenamewidth}{.25ex}\par
+    }% end parbox
+    \vspace{\@aftertitlevspace}
+    %% optional acadtitle
+    \ifdefempty{\acadtitle}{}{%
+      \ifdefstring{\@headlinetype}{name}{}{%
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+        \raggedleft\acadtitlestyle{\acadtitle\par}
+       }{}
+      }}
+    \\[2.5em]%
+    %% optional quote
+    \ifdefempty{\cvquote}{}{%
+      {\centering
+        \begin{minipage}{\@quotewidth}%
+          \centering\quotestyle{\cvquote}
+        \end{minipage}\\[\@afterquotevspace]%
+      }
+    }%
+  }% end \@cvtitle-casual
 \AtBeginDocument{%
   \thispagestyle{footer}
 } % end \AtBeginDocument

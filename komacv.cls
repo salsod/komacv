@@ -19,10 +19,10 @@
 %% 
 %% and version 1.3 or later is part of all distributions of LaTeX version
 %% 2005/12/01 or later.
-%% 
+%%
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{komacv}
-    [2021/02/12 v1.1.2 komacv class]
+    [2021/02/12 v1.1.2x komacv class]
 \providecommand*\mycolor{blue}
 \RequirePackage{ifthen,kvoptions,calc,xparse,xstring}
 \SetupKeyvalOptions{%
@@ -33,6 +33,7 @@ setkeys=\kvsetkeys%
 \DeclareStringOption[mycolor]{color}[mycolor]
 \DeclareStringOption[x11names]{xcolor}[x11names]
 \DeclareStringOption[classic]{style}[classic]
+\DeclareStringOption[below]{acadtitleposition}[below] % options: below, before, after
 \DeclareBoolOption[true]{fontawesome}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{scrartcl}}
 \ProcessKeyvalOptions{komacv} % evaluate keyval options
@@ -427,16 +428,31 @@ setkeys=\kvsetkeys%
 \providecommand\@headlinealignment{}
 \providecommand\@headlinetype{none}
 \providecommand\@headlinecontent{}
-\ProvideDocumentCommand{\headline}{O{c} m o}
-{
+\ProvideDocumentCommand{\headline}{O{c} m o}{%
   \renewcommand\@headlinealignment{#1}
   \renewcommand\@headlinetype{#2}
   \renewcommand\@headlinecontent{
     \IfNoValueTF {#3}
     {
       \ifstrequal{#2}{title}{\par\headlinestyle{Curriculum Vitae}}{}
-      \ifstrequal{#2}{name}{\par\firstnamestyle{\firstname}\ \familynamestyle{\familyname}\par\bigskip\acadtitlestyle{\acadtitle}}{}
-      }{\headlinestyle{#3}}
+      \ifstrequal{#2}{name}{%
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+          \firstnamestyle{\firstname~}%
+          \familynamestyle{\familyname}%
+          \ifdefempty{\acadtitle}{}{\par\acadtitlestyle{\acadtitle}\par}
+        }{}
+        \ifdefstring{\komacv@acadtitleposition}{before}{%
+          \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+          \firstnamestyle{\firstname~}%
+          \familynamestyle{\familyname}%
+        }{}
+        \ifdefstring{\komacv@acadtitleposition}{after}{%
+          \firstnamestyle{\firstname~}%
+          \familynamestyle{\familyname}%
+          \ifdefempty{\acadtitle}{}{\acadtitlestyle{,~\acadtitle}}%
+        }{}
+        }{}
+      }{\par\headlinestyle{#3}\par}
 }
 }
 \providecommand\setheadlinealignment{%

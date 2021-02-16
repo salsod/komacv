@@ -120,6 +120,7 @@
 % \changes{v1.1}{2017/04/12}{Option headline added; user length \texttt{titlenamemaxwidth}; behavior of sections and subsections improved; several bugfixes}
 % \changes{v1.1.1}{2017/04/17}{Typos in the documentation and minor bugs fixed}
 % \changes{v1.1.2}{2021/02/12}{Improved implementation of headline, minor bug fixes, httpslink added, fontawesome-switch added}
+% \changes{1.2}{xxxxxx}{Covering letter implemented, command \cs{cventryflex} added, switch for position of acadtitle added, adjustments for alignment of headline}
 %
 % \GetFileInfo{komacv.dtx}
 %
@@ -697,6 +698,8 @@ setkeys=\kvsetkeys%
 \DeclareStringOption[mycolor]{color}[mycolor]
 \DeclareStringOption[x11names]{xcolor}[x11names]
 \DeclareStringOption[classic]{style}[classic]
+\changes{v1.2}{xxxxx}{switch for position of acadtitle added}
+\DeclareStringOption[below]{acadtitleposition}[below] % options: below, before, after
 \DeclareBoolOption[true]{fontawesome}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{scrartcl}}
 %    \end{macrocode}
@@ -1140,6 +1143,7 @@ setkeys=\kvsetkeys%
 %\subsubsection*{Headline}
 % \changes{v1.1}{2017/04/12}{Vertical space between name and academic title adjusted}
 % \changes{v1.1.2}{2021/02/12}{New implementation}
+% \changes{v1.2}{xxxxxx}{Variable position of acadtitle}
 %    \begin{macrocode}
 \providecommand\@headlinealignment{}
 \providecommand\@headlinetype{none}
@@ -1321,7 +1325,7 @@ setkeys=\kvsetkeys%
 %    \end{macrocode}
 %
 %\paragraph{cventryflex}~\\%
-% \changes{vxxxx}{xxxxx}{New command}
+% \changes{vxxxx}{xxxxx}{New command \cs{cventryflex}}
 %usage: \cventryflexusage
 %    \begin{macrocode}
 \providecommand\cventryflexA{\bfseries}
@@ -1524,6 +1528,7 @@ setkeys=\kvsetkeys%
 %    \end{macrocode}
 %
 %\subsubsection*{Title / Head}
+% \changes{v1.2}{xxxxxx}{Variable position of acadtitle}
 %    \begin{macrocode}
 \AtEndPreamble{%
   \ifdimequal{\titlenamemaxwidth}{0pt}{%
@@ -1556,15 +1561,27 @@ setkeys=\kvsetkeys%
   }
 }
 }%
- % name and title
-\setheadline\par\bigskip
+  % name and title
+  \ifdef{\headline}{\setheadline\\[3ex]\par}{}
 \begin{minipage}[b]{\@titlenamewidth}%
   \RaggedRight
   \ifdefstring{\@headlinetype}{name}{\hfill\mbox{}}{%
-    \firstnamestyle{\firstname}\ %
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+    \firstnamestyle{\firstname~}%
     \familynamestyle{\familyname}%
     \ifdefempty{\acadtitle}{}{%
       \par\bigskip\acadtitlestyle{\acadtitle}}%
+  }{}
+  \ifdefstring{\komacv@acadtitleposition}{before}{%
+      \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+    \firstnamestyle{\firstname~}%
+    \familynamestyle{\familyname}%
+  }{}
+  \ifdefstring{\komacv@acadtitleposition}{after}{%
+    \firstnamestyle{\firstname~}%
+    \familynamestyle{\familyname}%
+    \ifdefempty{\acadtitle}{}{,~\acadtitlestyle{\acadtitle}}%
+  }{}
   }
 \end{minipage}%
   % optional data
@@ -1732,6 +1749,7 @@ setkeys=\kvsetkeys%
 %    \end{macrocode}
 %
 %\subsubsection*{Head / title}
+% \changes{v1.2}{xxxxxx}{Variable position of acadtitle}
 %    \begin{macrocode}
 \providecommand\@cvtitlecasual{%
 \newbox{\@picbox}
@@ -1751,22 +1769,39 @@ setkeys=\kvsetkeys%
 }% end savebox picbox
 \settowidth\@titlepicwidth{\usebox{\@picbox}}
 \setlength\@titlenamewidth{\textwidth-\@titlesepwidth-\@titlepicwidth}
-\setheadlinetypetitle\par
+\ifdefstring{\@headlinetype}{title}{\setheadlinetypetitle}{}
   \usebox{\@picbox}%
   \hspace*{\@titlesepwidth}%
   \parbox[b]{\@titlenamewidth}{%
       \ifdefstring{\@headlinetype}{name}{\setheadlinetypename}{%
-    \raggedleft{\firstnamestyle\firstname}%
-    ~{\familynamestyle\familyname}
-    }
-    \\
-\raggedleft\color{@firstnamecolor}\rule{\@titlenamewidth}{.25ex}\par
-  }% end parbox
-  \vspace{\@aftertitlevspace}
-  %% optional acadtitle
-  \ifdefempty{\acadtitle}{}{%
-          \ifdefstring{\@headlinetype}{name}{}{%
-    \raggedleft\acadtitlestyle{\acadtitle}}}\\[2.5em]%
+        \raggedleft
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+          \firstnamestyle{\firstname~}% 
+          \familynamestyle{\familyname}
+        }{}
+        \ifdefstring{\komacv@acadtitleposition}{before}{%
+          \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+          \firstnamestyle{\firstname~}% 
+          \familynamestyle{\familyname}
+        }{}
+        \ifdefstring{\komacv@acadtitleposition}{after}{%
+          \firstnamestyle{\firstname~}% 
+          \familynamestyle{\familyname}%
+          \ifdefempty{\acadtitle}{}{\acadtitlestyle{,~\acadtitle}}
+        }{}
+      }
+      \\
+      \raggedleft\color{@firstnamecolor}\rule{\@titlenamewidth}{.25ex}\par
+    }% end parbox
+    \vspace{\@aftertitlevspace}
+    %% optional acadtitle
+    \ifdefempty{\acadtitle}{}{%
+      \ifdefstring{\@headlinetype}{name}{}{%
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+        \raggedleft\acadtitlestyle{\acadtitle\par}
+       }{}
+      }}
+    \\[2.5em]%
   %% optional quote
   \ifdefempty{\cvquote}{}{%
     {\centering
@@ -1845,6 +1880,7 @@ setkeys=\kvsetkeys%
 %
 %\subsubsection*{Infocolumn and title}
 %\label{subsub:oldstyle-info-title}
+% \changes{v1.2}{xxxxxx}{Variable position of acadtitle}
 %    \begin{macrocode}
 \setlength{\infocolwidth}{3.5cm}
 \setlength{\sepinfocolwidth}{2em}
@@ -1918,16 +1954,29 @@ setkeys=\kvsetkeys%
       }% end ifundef photoname
     }% end savebox picbox
     \settowidth\@titlepicwidth{\usebox{\@picbox}}
-\setlength\@titlenamewidth{\textwidth-\@titlesepwidth-\@titlepicwidth}
-    \setheadlinetypetitle\par
+    \setlength\@titlenamewidth{\textwidth-\@titlesepwidth-\@titlepicwidth}
+    \ifdefstring{\@headlinetype}{title}{{\setheadlinetypetitle\\[20pt]\par}}{}
     \begin{minipage}[b]{\@titlenamewidth}%
-  \ifdefstring{\@headlinetype}{name}{\setheadlinetypename}{%
-      \firstnamestyle{\firstname}\ %
-      \familynamestyle{\familyname}%
-      \ifdefempty{\acadtitle}{}{%
-        \\[1.25em]\acadtitlestyle{\acadtitle}}%
-    }
+      \ifdefstring{\@headlinetype}{name}{\setheadlinetypename\par}{%
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+        \ifdefempty{\acadtitle}{}{%
+          \\[1.25em]\acadtitlestyle{\acadtitle}}%
+      }{}%
+      \ifdefstring{\komacv@acadtitleposition}{before}{%
+        \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+      }{}
+      \ifdefstring{\komacv@acadtitleposition}{after}{%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+        \ifdefempty{\acadtitle}{}{,~\acadtitlestyle{\acadtitle}}%
+      }{}
+      }
     \end{minipage}%
+    \hspace{\@titlesepwidth}
     % optional photo
       \usebox{\@picbox}%
       \\[\@aftertitlevspace]%

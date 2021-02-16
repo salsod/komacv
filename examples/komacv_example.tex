@@ -12,6 +12,7 @@
 % style=casual,% OR
 % style=oldstyle,%
 % fontawesome=false,
+% acadtitleposition=after, % available options: below (=default), before, after 
 ]{komacv}
 
 \pagestyle{scrheadings}
@@ -68,15 +69,15 @@
 % \setsansfont{AvantGarde Bk BT}
 % \setmonofont{Courier New}
 
-% \setkomafont{firstnamefont}{\fontsize{24}{26}\itshape}
-\addtokomafont{firstnamefont}{\fontsize{35}{50}}
+\setkomafont{firstnamefont}{\fontsize{16}{20}\itshape}%
+% \addtokomafont{firstnamefont}{\fontsize{16}{20}}
 % \addtokomafont{familynamefont}{\scshape}
 % \setkomafont{addressfont}{\scriptsize}
 % \setkomafont{acadtitlefont}{\usekomafont{familynamefont}}
 % \setkomafont{quotefont}{\ttfamily}
 % \addtokomafont{section}{\Huge\rmfamily\slshape}
 % \addtokomafont{subsection}{\bfseries}
-% \renewcommand{\headlinestyle}{\firstnamestyle}
+\renewcommand{\headlinestyle}{\firstnamestyle}
 
 
 % ===========================
@@ -117,8 +118,8 @@ sorting=ydnt,%
 \renewcommand*{\extrainfo}{Some extra info}
 % \renewcommand*{\cvquote}{\enquote{Convinced I grew that neither earth should perish, \\nor one of the souls it treasured.}} %p.373
 % \renewcommand\phonesymbol{Tel.~}
-% \headline[r]{title}[Lebenslauf] % [c|l|r]{none|name|title}[content]; default: [c]{none}[<\firstname \familyname> | Curriculum Vitae] 
-% \headline[l]{name}[Jane Elizabeth Eyre Rochester]
+% \headline[r]{title} %[Lebenslauf] % [c|l|r]{none|name|title}[content]; default: [c]{none}[<\firstname \familyname> | Curriculum Vitae] 
+% \headline[r]{name}[Jane Elizabeth Eyre Rochester]
 
 % ===========================
 %    PICTURE

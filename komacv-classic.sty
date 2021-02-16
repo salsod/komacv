@@ -42,40 +42,52 @@
 }{
 \setlength\@titlenamemaxwidth{\titlenamemaxwidth}
 }
-}
+} % end \AtEndPreamble
 \providecommand\@cvtitleclassic{%
  %% set \cs{@titlenamemaxwidth| to the full name length, capped by \cs{@titlenamemaxwidth|
-\settowidth{\@titlenamefullwidth}{\firstnamestyle{\firstname~}\familynamestyle{\familyname}}
- \ifdimless{\@titlenamemaxwidth}{\@titlenamefullwidth}{%
-   \setlength{\@titlenamewidth}{\@titlenamemaxwidth}
- }{%
-   \setlength{\@titlenamewidth}{\@titlenamefullwidth}
- }
- % set titlenamedetailswidth
-\setlength{\@titledetailswidth}{\textwidth-\@titlenamewidth-\@titlesepwidth}%
-\ifundef{\@photoname}{}{% else
-  \ifdefstring{\@photoframe}{frame}{%
-\setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth-2\@fboxextra}
-    \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
-  }{% else
-  \ifdefstring{\@photoframe}{mframe}{%
-\setlength{\@titledetailswidth}{\@titledetailswidth-\@mframepicshift}%
-    \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
-  }{% picture but no frame
-   \setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth}
-    \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
+  \settowidth{\@titlenamefullwidth}{\firstnamestyle{\firstname~}\familynamestyle{\familyname}}
+  \ifdimless{\@titlenamemaxwidth}{\@titlenamefullwidth}{%
+    \setlength{\@titlenamewidth}{\@titlenamemaxwidth}
+  }{%
+    \setlength{\@titlenamewidth}{\@titlenamefullwidth}
   }
-}
-}%
- % name and title
-\setheadline\par\bigskip
+  % set titlenamedetailswidth
+  \setlength{\@titledetailswidth}{\textwidth-\@titlenamewidth-\@titlesepwidth}%
+  \ifundef{\@photoname}{}{% else
+    \ifdefstring{\@photoframe}{frame}{%
+      \setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth-2\@fboxextra}
+      \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
+    }{% else
+      \ifdefstring{\@photoframe}{mframe}{%
+        \setlength{\@titledetailswidth}{\@titledetailswidth-\@mframepicshift}%
+        \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
+      }{% picture but no frame
+        \setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth}
+        \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
+      }
+    }
+  }%
+  % name and title
+  \ifdef{\headline}{\setheadline\\[3ex]\par}{}
 \begin{minipage}[b]{\@titlenamewidth}%
   \RaggedRight
   \ifdefstring{\@headlinetype}{name}{\hfill\mbox{}}{%
-    \firstnamestyle{\firstname}\ %
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+    \firstnamestyle{\firstname~}%
     \familynamestyle{\familyname}%
     \ifdefempty{\acadtitle}{}{%
       \par\bigskip\acadtitlestyle{\acadtitle}}%
+  }{}
+  \ifdefstring{\komacv@acadtitleposition}{before}{%
+      \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+    \firstnamestyle{\firstname~}%
+    \familynamestyle{\familyname}%
+  }{}
+  \ifdefstring{\komacv@acadtitleposition}{after}{%
+    \firstnamestyle{\firstname~}%
+    \familynamestyle{\familyname}%
+    \ifdefempty{\acadtitle}{}{,~\acadtitlestyle{\acadtitle}}%
+  }{}
   }
 \end{minipage}%
   % optional data

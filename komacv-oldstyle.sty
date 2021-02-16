@@ -107,16 +107,29 @@
       }% end ifundef photoname
     }% end savebox picbox
     \settowidth\@titlepicwidth{\usebox{\@picbox}}
-\setlength\@titlenamewidth{\textwidth-\@titlesepwidth-\@titlepicwidth}
-    \setheadlinetypetitle\par
+    \setlength\@titlenamewidth{\textwidth-\@titlesepwidth-\@titlepicwidth}
+    \ifdefstring{\@headlinetype}{title}{{\setheadlinetypetitle\\[20pt]\par}}{}
     \begin{minipage}[b]{\@titlenamewidth}%
-  \ifdefstring{\@headlinetype}{name}{\setheadlinetypename}{%
-      \firstnamestyle{\firstname}\ %
-      \familynamestyle{\familyname}%
-      \ifdefempty{\acadtitle}{}{%
-        \\[1.25em]\acadtitlestyle{\acadtitle}}%
-    }
+      \ifdefstring{\@headlinetype}{name}{\setheadlinetypename\par}{%
+        \ifdefstring{\komacv@acadtitleposition}{below}{%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+        \ifdefempty{\acadtitle}{}{%
+          \\[1.25em]\acadtitlestyle{\acadtitle}}%
+      }{}%
+      \ifdefstring{\komacv@acadtitleposition}{before}{%
+        \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+      }{}
+      \ifdefstring{\komacv@acadtitleposition}{after}{%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+        \ifdefempty{\acadtitle}{}{,~\acadtitlestyle{\acadtitle}}%
+      }{}
+      }
     \end{minipage}%
+    \hspace{\@titlesepwidth}
     % optional photo
       \usebox{\@picbox}%
       \\[\@aftertitlevspace]%

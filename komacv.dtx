@@ -63,6 +63,7 @@
 \newcommand*\httplinkusage{\cs{httplink}\oarg{optional text}\marg{link}}
 \newcommand*\httpslinkusage{\cs{httpslink}\oarg{optional text}\marg{link}}
 \newcommand*\emaillinkusage{\cs{emaillink}\oarg{optional text}\marg{link}}
+\newcommand*\signatureusage{\cs{Signature}\oarg{width}}
 \makeatletter
 \renewcommand{\Describe@Macro}{\@ifstar\Describe@MacroStar\Describe@MacroStarNoStar}
 \newcommand\Describe@MacroStar[1]{\endgroup
@@ -120,7 +121,7 @@
 % \changes{v1.1}{2017/04/12}{Option headline added; user length \texttt{titlenamemaxwidth}; behavior of sections and subsections improved; several bugfixes}
 % \changes{v1.1.1}{2017/04/17}{Typos in the documentation and minor bugs fixed}
 % \changes{v1.1.2}{2021/02/12}{Improved implementation of headline, minor bug fixes, httpslink added, fontawesome-switch added}
-% \changes{1.2}{xxxxxx}{Covering letter implemented, command \cs{cventryflex} added, switch for position of acadtitle added, adjustments for alignment of headline}
+% \changes{1.2}{xxxxxx}{Covering letter implemented, \cs{cventryflex} added, switch for position of acadtitle added, \cs{Signature} added, adjustments for alignment of headline}
 %
 % \GetFileInfo{komacv.dtx}
 %
@@ -389,6 +390,10 @@
 % \DescribeMacro{\beforesubsecvspace}
 % \DescribeMacro{\aftersubsecvspace}
 % Vertical space inserted before or after sections and subsections. Use an elastic length (e.\,g. something like |3ex plus .2ex minus .1ex| or \cs{baselineskip}). Note that the section and subsection definition of \mycls needs improvement, so the setting of these lengths may not procuce the desired result and the result may change in future versions.
+% 
+% \DescribeMacro{\beforesigvspace}
+% \changes{v1.2}{xxxxx}{Length \cs{beforesigvspace} added}
+% Vertical space inserted before the signature.
 %
 % \subsection{Colors}
 % \label{sub:colors}
@@ -572,7 +577,7 @@
 % \cvlistdoubleitemusage\\
 % put one or two pair(s) of label and item in the main column. The hint column is left empty. If the optional argument is omitted, the label is the default label provided by the style in use or the label defined with \cs{listitemsymbol}.
 %
-%\subsection{\cs{cventry}}
+%\subsection{\cs{cventry and \cs{cventryflex}}}
 % \label{sub:cventry}
 % \DescribeMacro{\cventry}
 % With the command\\
@@ -580,8 +585,6 @@
 % you get a more structured description. The first mandatory argument will usually be placed in the hint column (depending on the style in use), all others in the main column, each with its own formatting. Just leave empty those arguments you do not need (use empty braces |{}|) . Note, however, that the second mandatory argument should not be empty (otherwise the entry in the main column will start with a comma).
 % In case the predefined formatting of the arguments does not suit your needs you may of course use formatting commands inside the arguments. Do you want to change the formatting not just for one entry but for all of them, use \cs{cventryflex} instead.
 %  
-% \subsection{\cs{cventryflex}}
-% \label{sub:cventryflex}
 % \DescribeMacro{\cventryflex}
 % With the command\\
 % \cventryflexusage\\
@@ -630,6 +633,23 @@
 %
 % If you use them inside other elements make sure there are no empty lines surrounding them, otherwise you will get an error message (see \ref{warn:newline}).
 %
+% \subsection{Signature}
+% \label{sub:signature}
+% % \begin{macro}{\Signature}
+% \changes{v1.2}{xxxx}{New feature \cs{Signature}, contributed by Richard Grewe}
+% \signatureusage draws a line of width \meta{width} (default:
+% $38.2\%$ of the text width (where $38.2\%=1-\frac{1}{\varphi}$, with $\varphi$
+% being the golden ratio).
+% \end{macro}
+% \begin{macro}{\signaturecity}
+% Below the line, the macro puts the name of the city, which is expected in the
+% \cs{signaturecity} macro, and the current date (via \cs{today}).
+% Use \cs{renewcommand}\cs{signaturecity}\marg{yourcity} to specify the city.
+% Before the signature line, a vertical space of \cs{beforesigvspace} (default:
+% 3cm) is inserted. Use \cs{setlength}\cs{beforesigvspace}\marg{yourlength} to specify
+% another distance.
+% \end{macro}
+
 %\section{Styles}
 %\subsection{The \mysty{classic} style}
 % \label{sub:classic}
@@ -698,7 +718,7 @@ setkeys=\kvsetkeys%
 \DeclareStringOption[mycolor]{color}[mycolor]
 \DeclareStringOption[x11names]{xcolor}[x11names]
 \DeclareStringOption[classic]{style}[classic]
-\changes{v1.2}{xxxxx}{switch for position of acadtitle added}
+% \changes{v1.2}{xxxxx}{switch for position of acadtitle added}
 \DeclareStringOption[below]{acadtitleposition}[below] % options: below, before, after
 \DeclareBoolOption[true]{fontawesome}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{scrartcl}}
@@ -817,6 +837,7 @@ setkeys=\kvsetkeys%
 %
 %\subsubsection*{Lengths}
 % \changes{v1.1}{2017/04/12}{New user length \cs{titlenamemaxwidth}}
+% \changes{v1.2}{xxxx}{New user length \cs{beforesigvspace}}
 %    \begin{macrocode}
 \setlength\parindent{0pt}
 \setlength\columnsep{10\p@}
@@ -894,6 +915,8 @@ setkeys=\kvsetkeys%
 \newlength\@aftersubsecvspace
 \newlength\aftersubsecvspace
 \setlength\aftersubsecvspace{0pt}
+\newlength\beforesigvspace
+\setlength\beforesigvspace{3cm}
 \AtEndPreamble{%
   % infocol (oldstyle)
   \setlength{\@infocolwidth}{\infocolwidth}
@@ -1421,6 +1444,19 @@ setkeys=\kvsetkeys%
   }
 %    \end{macrocode}
 %
+% \subsubsection*{Signature}
+% \changes{v1.2}{xxxx}{\cs{Signature} and \cs{signaturecity} added}
+% usage: \signatureusage
+%    \begin{macrocode}
+\providecommand*\signaturecity{}
+\providecommand\Signature[1][0.382\textwidth]{%
+  \par
+  \begin{tabular}{@{}p{#1}@{}}
+    \rule{0pt}{\beforesigvspace}\\\hline
+    \signaturecity, \today\hfill
+  \end{tabular}}
+%    \end{macrocode}
+
 %\subsubsection*{Sections}
 % \changes{v1.1}{2017/04/12}{Lengths \cs{beforesecvspace}, \cs{aftersecvspace}, \cs{beforesubsecvspace} and  \cs{aftersubsecvspace} added to \cs{section} and \cs{subsection} definitions}
 %    \begin{macrocode}
@@ -1532,77 +1568,78 @@ setkeys=\kvsetkeys%
 %    \begin{macrocode}
 \AtEndPreamble{%
   \ifdimequal{\titlenamemaxwidth}{0pt}{%
-\setlength{\@titlenamemaxwidth}{.525\textwidth}
-}{
-\setlength\@titlenamemaxwidth{\titlenamemaxwidth}
-}
+    \setlength{\@titlenamemaxwidth}{.525\textwidth}
+  }{
+    \setlength\@titlenamemaxwidth{\titlenamemaxwidth}
+  }
 }
 \providecommand\@cvtitleclassic{%
  %% set \cs{@titlenamemaxwidth| to the full name length, capped by \cs{@titlenamemaxwidth|
-\settowidth{\@titlenamefullwidth}{\firstnamestyle{\firstname~}\familynamestyle{\familyname}}
+ \settowidth{\@titlenamefullwidth}{\firstnamestyle{\firstname~}\familynamestyle{\familyname}}
  \ifdimless{\@titlenamemaxwidth}{\@titlenamefullwidth}{%
    \setlength{\@titlenamewidth}{\@titlenamemaxwidth}
  }{%
    \setlength{\@titlenamewidth}{\@titlenamefullwidth}
  }
  % set titlenamedetailswidth 
-\setlength{\@titledetailswidth}{\textwidth-\@titlenamewidth-\@titlesepwidth}%
-\ifundef{\@photoname}{}{% else
-  \ifdefstring{\@photoframe}{frame}{%
-\setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth-2\@fboxextra}
-    \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
-  }{% else
-  \ifdefstring{\@photoframe}{mframe}{%
-\setlength{\@titledetailswidth}{\@titledetailswidth-\@mframepicshift}%
-    \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
-  }{% picture but no frame
-   \setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth}
-    \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning                                              
-  }
-}
-}%
+ \setlength{\@titledetailswidth}{\textwidth-\@titlenamewidth-\@titlesepwidth}%
+ \ifundef{\@photoname}{}{% else
+   \ifdefstring{\@photoframe}{frame}{%
+     \setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth-2\@fboxextra}
+     \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
+   }{% else
+     \ifdefstring{\@photoframe}{mframe}{%
+       \setlength{\@titledetailswidth}{\@titledetailswidth-\@mframepicshift}%
+       \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning
+     }{% picture but no frame
+       \setlength{\@titledetailswidth}{\@titledetailswidth-\@photowidth}
+       \setlength{\@titledetailswidth}{.99\@titledetailswidth} % avoid overfullbox warning                                              
+     }
+   }
+ }%
   % name and title
-  \ifdef{\headline}{\setheadline\\[3ex]\par}{}
-\begin{minipage}[b]{\@titlenamewidth}%
-  \RaggedRight
-  \ifdefstring{\@headlinetype}{name}{\hfill\mbox{}}{%
-        \ifdefstring{\komacv@acadtitleposition}{below}{%
-    \firstnamestyle{\firstname~}%
-    \familynamestyle{\familyname}%
-    \ifdefempty{\acadtitle}{}{%
-      \par\bigskip\acadtitlestyle{\acadtitle}}%
-  }{}
-  \ifdefstring{\komacv@acadtitleposition}{before}{%
-      \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
-    \firstnamestyle{\firstname~}%
-    \familynamestyle{\familyname}%
-  }{}
-  \ifdefstring{\komacv@acadtitleposition}{after}{%
-    \firstnamestyle{\firstname~}%
-    \familynamestyle{\familyname}%
-    \ifdefempty{\acadtitle}{}{,~\acadtitlestyle{\acadtitle}}%
-  }{}
-  }
-\end{minipage}%
+  \ifdef{\headline}{\setheadline%\\[3ex]
+    \par\vspace{3ex}}{}
+  \begin{minipage}[b]{\@titlenamewidth}%
+    \RaggedRight
+    \ifdefstring{\@headlinetype}{name}{\hfill\mbox{}}{%
+      \ifdefstring{\komacv@acadtitleposition}{below}{%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+        \ifdefempty{\acadtitle}{}{%
+          \par\bigskip\acadtitlestyle{\acadtitle}}%
+      }{}
+      \ifdefstring{\komacv@acadtitleposition}{before}{%
+        \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+      }{}
+      \ifdefstring{\komacv@acadtitleposition}{after}{%
+        \firstnamestyle{\firstname~}%
+        \familynamestyle{\familyname}%
+        \ifdefempty{\acadtitle}{}{,~\acadtitlestyle{\acadtitle}}%
+      }{}
+    }
+  \end{minipage}%
   % optional data
   \begin{minipage}[b]{\@titledetailswidth}%
     \raggedleft\addressstyle{%
-    \ifdefempty{\addressstreet}{}{%
-      \@titledetailsnewline%
-      \@addresssymbol\addressstreet%
-      \ifdefempty{\addresscity}{}{%
-        \@titledetailsnewline\addresscity}}%
-    \ifdefempty{\mobile}{}{%
-      \@titledetailsnewline\@mobilesymbol~\mobile}%
-    \ifdefempty{\phonenr}{}{%
-      \@titledetailsnewline\@phonesymbol~\phonenr}%
-    \ifdefempty{\faxnr}{}{%
-      \@titledetailsnewline\@faxsymbol~\faxnr}%
-    \ifdefempty{\email}{}{%
-      \@titledetailsnewline\@emailsymbol\emaillink{\email}}%
+      \ifdefempty{\addressstreet}{}{%
+        \@titledetailsnewline%
+        \@addresssymbol\addressstreet%
+        \ifdefempty{\addresscity}{}{%
+          \@titledetailsnewline\addresscity}}%
+      \ifdefempty{\mobile}{}{%
+        \@titledetailsnewline\@mobilesymbol~\mobile}%
+      \ifdefempty{\phonenr}{}{%
+        \@titledetailsnewline\@phonesymbol~\phonenr}%
+      \ifdefempty{\faxnr}{}{%
+        \@titledetailsnewline\@faxsymbol~\faxnr}%
+      \ifdefempty{\email}{}{%
+        \@titledetailsnewline\@emailsymbol\emaillink{\email}}%
     \ifdefempty{\homepage}{}{%
       \@titledetailsnewline\@homepagesymbol%
-            \IfSubStr{\homepage}{https}{%
+      \IfSubStr{\homepage}{https}{%
         \httpslink{\homepage}}{%
         \httplink{\homepage}}}%
     \ifdefempty{\twitter}{}{%
@@ -1616,7 +1653,7 @@ setkeys=\kvsetkeys%
     \ifdefempty{\extrainfo}{}{%
       \@titledetailsnewline\extrainfo}%
   }%
-  \end{minipage}%
+\end{minipage}
   % optional photo
   \ifundef{\@photoname}{}{% with picture:
     \hspace*{\@titlesepwidth}%
@@ -1631,7 +1668,7 @@ setkeys=\kvsetkeys%
       \begin{minipage}[b]{\@photowidth}
         \includegraphics[width=\@photowidth]{\@photoname}
       \end{minipage}}}
-\\[\@aftertitlevspace]
+  \\[\@aftertitlevspace]
   % optional quote
   \ifundef{\cvquote}{}{%
     {\centering
@@ -1639,7 +1676,7 @@ setkeys=\kvsetkeys%
         \centering\quotestyle{\cvquote}%
       \end{minipage}\\[\@afterquotevspace]%
     }
-    }%
+  }%
 }
 %    \end{macrocode}
 %
@@ -1798,10 +1835,10 @@ setkeys=\kvsetkeys%
     \ifdefempty{\acadtitle}{}{%
       \ifdefstring{\@headlinetype}{name}{}{%
         \ifdefstring{\komacv@acadtitleposition}{below}{%
-        \raggedleft\acadtitlestyle{\acadtitle\par}
+        \raggedleft\acadtitlestyle{\acadtitle}\par
        }{}
       }}
-    \\[2.5em]%
+ %    \\[2.5em]%
   %% optional quote
   \ifdefempty{\cvquote}{}{%
     {\centering

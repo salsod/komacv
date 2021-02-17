@@ -23,6 +23,7 @@
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesPackage{komacv-casual}
     [2021/02/12 v1.1.2 style package for komacv class]
+
 \addtokomafont{firstnamefont}{\sffamily\fontsize{38}{40}}
 \addtokomafont{acadtitlefont}{\sffamily}
 \addtokomafont{addressfont}{\sffamily\small}
@@ -112,16 +113,16 @@
       \ifdefstring{\@headlinetype}{name}{\setheadlinetypename}{%
         \raggedleft
         \ifdefstring{\komacv@acadtitleposition}{below}{%
-          \firstnamestyle{\firstname~}% 
+          \firstnamestyle{\firstname~}%
           \familynamestyle{\familyname}
         }{}
         \ifdefstring{\komacv@acadtitleposition}{before}{%
           \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
-          \firstnamestyle{\firstname~}% 
+          \firstnamestyle{\firstname~}%
           \familynamestyle{\familyname}
         }{}
         \ifdefstring{\komacv@acadtitleposition}{after}{%
-          \firstnamestyle{\firstname~}% 
+          \firstnamestyle{\firstname~}%
           \familynamestyle{\familyname}%
           \ifdefempty{\acadtitle}{}{\acadtitlestyle{,~\acadtitle}}
         }{}
@@ -134,19 +135,19 @@
     \ifdefempty{\acadtitle}{}{%
       \ifdefstring{\@headlinetype}{name}{}{%
         \ifdefstring{\komacv@acadtitleposition}{below}{%
-        \raggedleft\acadtitlestyle{\acadtitle\par}
+        \raggedleft\acadtitlestyle{\acadtitle}\par
        }{}
       }}
-    \\[2.5em]%
-    %% optional quote
-    \ifdefempty{\cvquote}{}{%
-      {\centering
-        \begin{minipage}{\@quotewidth}%
-          \centering\quotestyle{\cvquote}
-        \end{minipage}\\[\@afterquotevspace]%
-      }
-    }%
-  }% end \@cvtitle-casual
+ %    \\[2.5em]%
+  %% optional quote
+  \ifdefempty{\cvquote}{}{%
+    {\centering
+      \begin{minipage}{\@quotewidth}%
+        \centering\quotestyle{\cvquote}
+      \end{minipage}\\[\@afterquotevspace]%
+    }
+  }%
+}% end \@cvtitle-casual
 \AtBeginDocument{%
   \thispagestyle{footer}
 } % end \AtBeginDocument

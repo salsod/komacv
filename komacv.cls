@@ -19,10 +19,11 @@
 %% 
 %% and version 1.3 or later is part of all distributions of LaTeX version
 %% 2005/12/01 or later.
-%%
+%% 
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{komacv}
-    [2021/02/12 v1.1.2x komacv class]
+    [2021/02/12 v1.1.2 komacv class]
+
 \providecommand*\mycolor{blue}
 \RequirePackage{ifthen,kvoptions,calc,xparse,xstring}
 \SetupKeyvalOptions{%
@@ -200,6 +201,8 @@ setkeys=\kvsetkeys%
 \newlength\@aftersubsecvspace
 \newlength\aftersubsecvspace
 \setlength\aftersubsecvspace{0pt}
+\newlength\beforesigvspace
+\setlength\beforesigvspace{3cm}
 \AtEndPreamble{%
   % infocol (oldstyle)
   \setlength{\@infocolwidth}{\infocolwidth}
@@ -428,31 +431,16 @@ setkeys=\kvsetkeys%
 \providecommand\@headlinealignment{}
 \providecommand\@headlinetype{none}
 \providecommand\@headlinecontent{}
-\ProvideDocumentCommand{\headline}{O{c} m o}{%
+\ProvideDocumentCommand{\headline}{O{c} m o}
+{
   \renewcommand\@headlinealignment{#1}
   \renewcommand\@headlinetype{#2}
   \renewcommand\@headlinecontent{
     \IfNoValueTF {#3}
     {
       \ifstrequal{#2}{title}{\par\headlinestyle{Curriculum Vitae}}{}
-      \ifstrequal{#2}{name}{%
-        \ifdefstring{\komacv@acadtitleposition}{below}{%
-          \firstnamestyle{\firstname~}%
-          \familynamestyle{\familyname}%
-          \ifdefempty{\acadtitle}{}{\par\acadtitlestyle{\acadtitle}\par}
-        }{}
-        \ifdefstring{\komacv@acadtitleposition}{before}{%
-          \ifdefempty{\acadtitle}{}{\acadtitlestyle{\acadtitle~}}%
-          \firstnamestyle{\firstname~}%
-          \familynamestyle{\familyname}%
-        }{}
-        \ifdefstring{\komacv@acadtitleposition}{after}{%
-          \firstnamestyle{\firstname~}%
-          \familynamestyle{\familyname}%
-          \ifdefempty{\acadtitle}{}{\acadtitlestyle{,~\acadtitle}}%
-        }{}
-        }{}
-      }{\par\headlinestyle{#3}\par}
+      \ifstrequal{#2}{name}{\par\firstnamestyle{\firstname}\ \familynamestyle{\familyname}\par\bigskip\acadtitlestyle{\acadtitle}}{}
+      }{\headlinestyle{#3}}
 }
 }
 \providecommand\setheadlinealignment{%
@@ -562,7 +550,6 @@ setkeys=\kvsetkeys%
     }%
   }%
 }
-
 \providecommand*{\cventry}[7][\@afterelementsvspace]{%
   \cvitem[#1]{#2}{%
     {\bfseries#3}%
@@ -579,7 +566,6 @@ setkeys=\kvsetkeys%
     \fi%
   }%
 }
-
 \providecommand\cventryflexA{\bfseries}
 \providecommand\cventryflexB{}
 \providecommand\cventryflexC{}
@@ -600,7 +586,6 @@ setkeys=\kvsetkeys%
     \fi%
   }%
 }
-
 
 \newbox{\@commentmainbox}
 \providecommand*{\cvitemwithcomment}[4][\@afterelementsvspace]{%
@@ -648,6 +633,14 @@ setkeys=\kvsetkeys%
       \href{mailto:#2}{\usefontofkomafont{emaillinkfont}#2}}{%
       \href{mailto:#2}{\usefontofkomafont{emaillinkfont}#1}}%
   }
+\providecommand*\signaturecity{}
+\providecommand\Signature[1][0.382\textwidth]{%
+  \par
+  \begin{tabular}{@{}p{#1}@{}}
+    \rule{0pt}{\beforesigvspace}\\\hline
+    \signaturecity, \today\hfill
+  \end{tabular}}
+
 \hypersetup{
   breaklinks,
   unicode,

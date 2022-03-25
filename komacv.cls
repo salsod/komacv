@@ -379,7 +379,7 @@ setkeys=\kvsetkeys%
 \renewcommand*\@facebooksymbol{\facebooksymbol}
 }
   \ifdefempty{\linkedinsymbol}{}{%
-\renewcommand*\@linkedinesymbol{\linkedinsymbol}
+\renewcommand*\@linkedinsymbol{\linkedinsymbol}
 }
   \ifdefempty{\fsymbol}{}{%
 \renewcommand*\@fsymbol{\fsymbol}
